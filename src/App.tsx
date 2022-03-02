@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { makeDemo } from './example';
 
 function App() {
+  const [text, setText] = useState('Не готово еще!')
+  useEffect(() => {
+    let flag = false;
+    makeDemo().then((data)=>{
+      if(!flag){
+        setText(JSON.stringify(data));
+      }
+    })
+    .catch((err)=>{
+      if(!flag){
+        setText(`${err}`);
+      }
+    })
+    return () => {
+      flag = true;
+    }
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +37,10 @@ function App() {
           Learn React
         </a>
       </header>
+      <main>
+        <h2>чё? правда?!</h2>
+        <p>{text}</p>
+      </main>
     </div>
   );
 }
